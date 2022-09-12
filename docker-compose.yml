@@ -1,0 +1,38 @@
+version: '3'
+
+services:
+     
+  nginx:
+    image: nginx:1.23.1
+    ports:
+      - "8000:8000"
+    networks:
+      - djlan
+    volumes:
+      - ./django.conf:/etc/nginx/conf.d/default.conf
+  
+  db:
+    restart: always
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    volumes:
+      - pgdata:/var/lib/postgresql/data/
+    networks:
+      - djlan
+ 
+  web:
+    restart: always
+    build: ./app
+    env_file: .env
+    networks:
+      - djlan 
+
+networks:
+  djlan:
+
+volumes:
+  pgdata:
+
