@@ -1,6 +1,14 @@
 version: '3'
 
 services:
+  web:
+    restart: always
+    build: ./app
+    env_file: .env
+    networks:
+      - djlan 
+    depends_on:
+      - db
      
   nginx:
     image: nginx:1.23.1
@@ -22,13 +30,6 @@ services:
       - pgdata:/var/lib/postgresql/data/
     networks:
       - djlan
- 
-  web:
-    restart: always
-    build: ./app
-    env_file: .env
-    networks:
-      - djlan 
 
 networks:
   djlan:
